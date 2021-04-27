@@ -8,7 +8,7 @@ BUCKET = os.environ['BUCKET']
 
 def main(event, context):
     s3 = boto3.client('s3')
-    department_id = 'allDepartment'
+    department_id = event['department_id']
     params = f'?department={department_id}'
     base_path = 'customerHappiness'
     path = f'{base_path}{params}'

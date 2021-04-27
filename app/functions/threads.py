@@ -8,7 +8,7 @@ BUCKET = os.environ['BUCKET']
 
 def main(event, context):
     s3 = boto3.client('s3')
-    ticket_id = '511401000000141411'
+    ticket_id = event['ticket_id']
     path = f'tickets/{ticket_id}/threads'
     try:
         now = datetime.now().strftime("%Y/%m/%d/%H:%M:%S")

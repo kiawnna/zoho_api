@@ -8,7 +8,7 @@ BUCKET = os.environ['BUCKET']
 
 def main(event, context):
     s3 = boto3.client('s3')
-    status = 'Open'
+    status = event['status']
     params = f'?status={status}'
     base_path = 'ticketsByStatus'
     path = f'{base_path}{params}'
