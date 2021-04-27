@@ -1,0 +1,198 @@
+service: zoho-api
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+  environment:
+    BUCKET: ${self:resources.Resources.ZohoBucket.Properties.BucketName}
+    SECRET_ID: zoho_auth
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - secretsmanager:GetSecretValue
+        - secretsmanager:PutSecretValue
+        - s3:PutObject
+        - s3:CreateBucket
+      Resource: '*'
+
+package:
+  individually: true
+  exclude:
+    - app/functions
+    - node_modules/**
+    - venv/**
+
+plugins:
+  - serverless-python-requirements
+  - serverless-pseudo-parameters
+
+resources:
+  Resources:
+    ZohoBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: InsertABucketNameHere
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+functions:
+  accounts:
+    handler: app/functions/accounts.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/accounts.py
+        - app/zoho_auth_function.py
+
+  agents:
+    handler: app/functions/agents.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/agents.py
+        - app/zoho_auth_function.py
+
+  calls:
+    handler: app/functions/calls.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/calls.py
+        - app/zoho_auth_function.py
+
+
+  contacts:
+    handler: app/functions/contacts.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/contacts.py
+        - app/zoho_auth_function.py
+
+  departments:
+    handler: app/functions/departments.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/departments.py
+        - app/zoho_auth_function.py
+
+  notification-pending_approvals:
+    handler: app/functions/notification-pending_approvals.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/notification-pending_approvals.py
+        - app/zoho_auth_function.py
+
+  notification-email_delivery_failures:
+    handler: app/functions/notification-email_delivery_failures.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/notification-email_delivery_failures.py
+        - app/zoho_auth_function.py
+
+  threads:
+    handler: app/functions/threads.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/threads.py
+        - app/zoho_auth_function.py
+
+  tickets:
+    handler: app/functions/tickets.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/tickets.py
+        - app/zoho_auth_function.py
+
+  ticket_tags:
+    handler: app/functions/ticket_tags.main
+    events:
+      - schedule:
+          rate: rate(4 hours)
+          enabled: true
+    package:
+      include:
+        - app/functions/ticket_tags.py
+        - app/zoho_auth_function.py
+
+# These endpoints are not available in the trial version of Zoho Desk, but are in working order. The data may need to be
+# manipulated some when real testing can be done, depending on how Zoho returns it.
+#  queue-by_status:
+#    handler: app/functions/queue-by_status.main
+#    events:
+#      - schedule:
+#          rate: rate(4 hours)
+#          enabled: true
+#    package:
+#      include:
+#        - app/functions/queue-by_status.py
+#        - app/zoho_auth_function.py
+
+#  ticket_time_entry:
+#    handler: app/functions/ticket_time_entry.main
+#    events:
+#      - schedule:
+#          rate: rate(4 hours)
+#          enabled: true
+#    package:
+#      include:
+#        - app/functions/ticket_time_entry.py
+#        - app/zoho_auth_function.py
+#
+#customer_happiness:
+#    handler: app/functions/customer_happiness.main
+#    events:
+#      - schedule:
+#          rate: rate(4 hours)
+#          enabled: true
+#    package:
+#      include:
+#        - app/functions/customer_happiness.py
+#        - app/zoho_auth_function.py
+#
+#agent_time_entry:
+#    handler: app/functions/agent_time_entry.main
+#    events:
+#      - schedule:
+#          rate: rate(4 hours)
+#          enabled: true
+#    package:
+#      include:
+#        - app/functions/agent_time_entry.py
+#        - app/zoho_auth_function.py
