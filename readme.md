@@ -1,5 +1,5 @@
 # Zoho Desk API Integration
-# THIS IS AN UPDATE TO TEST GH WEBHOOKS
+
 
 This integration uses the Serverless Framework to deploy functions that interact with Zoho Desk's RESTful API.
 An authentication layer is set up so that a all a user needs to pass in is the route in Zoho Desk they want to hit,
